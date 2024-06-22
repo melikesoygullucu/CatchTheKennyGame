@@ -60,15 +60,15 @@ class ViewController: UIViewController {
         image8.isUserInteractionEnabled = true
         image9.isUserInteractionEnabled = true
         
-        let recognizer1 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer2 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer3 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer4 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer5 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer6 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer7 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer8 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
-        let recognizer9 = UIGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer1 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer2 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer3 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer4 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer5 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer6 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer7 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer8 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
+        let recognizer9 = UITapGestureRecognizer(target: self, action: #selector(increaseScore))
         
         image1.addGestureRecognizer(recognizer1)
         image2.addGestureRecognizer(recognizer2)
@@ -94,33 +94,34 @@ class ViewController: UIViewController {
     }
     
     @objc func timerFunction() {
-        timerLabel.text = String(counter)
         counter -= 1
+        timerLabel.text = String(counter)
+        
         if counter == 0 {
             timer.invalidate()
             hideTimer.invalidate()
-            alertDialog()
             
             for kenny in kennyArray {
                 kenny.isHidden = true
             }
             
-            if self.highscore > self.score {
+            if self.highscore < self.score {
                 self.highscore = self.score
                 highscoreLabel.text = "Highscore: \(self.highscore)"
                 UserDefaults.standard.set(self.highscore, forKey: "highscore")
             }
+            alertDialog()
             
         }
     }
     
-    func alertDialog() {
+    @objc func alertDialog() {
         let alert = UIAlertController(title: "Time's Up", message: "Do you want to play again?", preferredStyle: UIAlertController.Style.alert)
         let OKButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel)
         let ReplayButton = UIAlertAction(title: "Replay", style: UIAlertAction.Style.default) { (UIAlertAction) in
             self.score = 0
             self.scoreLabel.text = "Score: \(self.score)"
-            self.counter = 0
+            self.counter = 10
             self.timerLabel.text = "\(self.counter)"
             
             self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.timerFunction), userInfo: nil, repeats: true)
